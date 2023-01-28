@@ -1,7 +1,35 @@
 const express = require("express");
+const cors = require("cors");
+const bodyParser = require('body-parser');
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const mongoose = require("mongoose");
+const User = require("./user");
+const routes = require('./routes')
+
 const app = express();
-const mongoose = require("mongoose")
-const passport = require("passport")
+
+app.use(cors());
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
+app.use(
+    session({ 
+        secret: "secret-key", 
+        resave: false, 
+        saveUninitialized: false 
+    })
+    );
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(routes)
 
 mongoose.connect("mongodb://localhost/bodyboostdb" );
 
