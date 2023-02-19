@@ -6,7 +6,8 @@ const router = express.Router();
 // Define the endpoint to get all workouts
 router.get('/', async (req, res) => {
   try {
-    const workouts = await Workout.find();
+    const userId = req.query.userId;
+    const workouts = await Workout.find({ userId: userId });
     res.json(workouts);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -31,6 +32,7 @@ router.post('/', async (req, res) => {
   const workout = new Workout({
     title: req.body.title,
     exercises: req.body.exercises,
+    userId: req.body.userId
   });
 
   try {
