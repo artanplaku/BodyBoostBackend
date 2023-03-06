@@ -1,7 +1,28 @@
 const express = require('express');
 const Workout = require('../models/workoutModel');
-
+const jwt = require('jsonwebtoken')
 const router = express.Router();
+
+// Define checkToken function
+function checkToken(req, res, next) {
+    const header = req.headers['authorization'];
+    
+    if(typeof header !== 'undefined') {
+      const bearer = header.split(' ');
+      const token = bearer[1];
+    
+      jwt.verify(token, 'secretKey', (err, decoded) => {
+        if(err) {
+          return res.sendStatus(403);
+        }
+    
+        req.userId = decoded.id;
+        next();
+      });
+    } else {
+      return res.sendStatus(401);
+    }
+  }
 
 // Define the endpoint to get all workouts
 router.get('/', async (req, res) => {
@@ -15,7 +36,7 @@ router.get('/', async (req, res) => {
 });
 
 // Define the endpoint to get a single workout by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', checkToken, async (req, res) => {
   try {
     const workout = await Workout.findById(req.params.id);
     if (!workout) {
@@ -28,7 +49,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Define the endpoint to create a new workout
-router.post('/', async (req, res) => {
+router.post('/', checkToken, async (req, res) => {
   const workout = new Workout({
     title: req.body.title,
     exercises: req.body.exercises,
