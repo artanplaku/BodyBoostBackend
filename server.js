@@ -41,6 +41,10 @@ db.on("connected", () => {
     console.log("Mongoose default connection is open")
 })
 
+db.on("error", (err) => {
+  console.error(`MongoDB connection error: ${err}`);
+});
+
 app.get('/', (req, res) =>{
     res.send('Hello, World')
 })

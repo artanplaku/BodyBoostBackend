@@ -22,6 +22,10 @@ const workoutSchema = new mongoose.Schema({
       weight: {
         type: Number,
       },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
   userId: {
