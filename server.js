@@ -6,6 +6,7 @@ const workoutRouter = require('./routes/workoutRoutes')
 const UserRoutes = require('./routes/UserRoutes');
 const jwt = require('jsonwebtoken');
 const protectedRouter = require('./routes/protectedRouter');
+require('dotenv').config();
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-mongoose.connect("mongodb://localhost/bodyboostdb");
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 
@@ -24,7 +25,7 @@ const checkToken = (req, res, next) => {
       const bearer = header.split(' ');
       const token = bearer[1];
   
-      jwt.verify(token, 'secretKey', (err, decoded) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if(err) {
           return res.sendStatus(403);
         }
