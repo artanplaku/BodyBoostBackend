@@ -54,7 +54,7 @@ app.use('/api/workouts', workoutRouter);
 app.use('/api/users', UserRoutes);
 app.use('/api/protected', checkToken, protectedRouter);
 
-const port = 4000;
+const port = process.env.PORT || 4000
 app.listen(port, ()=>{
     console.log(`Server listening on port ${port}`)
 });
