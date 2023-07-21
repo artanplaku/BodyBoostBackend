@@ -53,6 +53,7 @@ router.post('/', checkToken, async (req, res) => {
   const workout = new Workout({
     title: req.body.title,
     exercises: req.body.exercises,
+    day: req.body.day,
     userId: req.body.userId
   });
 
