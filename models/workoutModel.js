@@ -28,6 +28,9 @@ const workoutSchema = new mongoose.Schema({
       },
     },
   ],
+  day: {
+    type: String,
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
