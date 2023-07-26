@@ -1,8 +1,14 @@
 const express = require('express');
 const multer = require('multer');
-const ImageModel = require('../models/imageModel'); // Path to your ImageModel file
+const ImageModel = require('../models/imageModel'); 
 const router = express.Router();
-const checkToken = require('../checkToken'); // Path to your checkToken middleware
+const checkToken = require('../checkToken');
+const fs = require('fs'); 
+
+const dir = './uploads';
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,7 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/upload', checkToken, upload.single('image'), async (req, res) => {
-  const userId = req.userId; // This assumes that req.userId is set by your checkToken middleware
+  const userId = req.userId; 
   const imageUrl = `/uploads/${req.file.filename}`;
 
   const image = new ImageModel({
