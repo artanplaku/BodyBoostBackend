@@ -2,27 +2,9 @@ const express = require('express');
 const Workout = require('../models/workoutModel');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
+const checkToken = require('../checkToken')
 
-// Define checkToken function
-function checkToken(req, res, next) {
-    const header = req.headers['authorization'];
-    
-    if(typeof header !== 'undefined') {
-      const bearer = header.split(' ');
-      const token = bearer[1];
-    
-      jwt.verify(token, 'secretKey', (err, decoded) => {
-        if(err) {
-          return res.sendStatus(403);
-        }
-    
-        req.userId = decoded.id;
-        next();
-      });
-    } else {
-      return res.sendStatus(401);
-    }
-  }
+
 
 // Define the endpoint to get all workouts
 router.get('/', async (req, res) => {
