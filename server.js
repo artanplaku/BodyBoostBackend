@@ -36,6 +36,8 @@ app.use('/api/users', UserRoutes);
 app.use('/api/protected', checkToken, protectedRouter);
 app.use('/api/images', imageRoutes);
 app.use('/uploads', express.static('uploads'));
+app.use('/api/contracts', contractRoutes);
+
 
 const port = process.env.PORT || 4000
 app.listen(port, ()=>{
