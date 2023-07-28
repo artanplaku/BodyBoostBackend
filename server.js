@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const workoutRouter = require('./routes/workoutRoutes')
 const UserRoutes = require('./routes/UserRoutes');
 const protectedRouter = require('./routes/protectedRouter');
-const imageRoutes = require('./routes/ImageRoutes'); 
+const imageRoutes = require('./routes/ImageRoutes');
+const contractRoutes = require('./routes/ContractRoutes') 
 const checkToken = require('./checkToken')
 require('dotenv').config();
 
