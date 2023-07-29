@@ -1,5 +1,5 @@
 const express = require('express');
-const Contract = require('../models/contractModel');
+const ContractModel = require('../models/contractModel');
 const checkToken = require('../checkToken');
 const router = express.Router();
 
@@ -7,7 +7,7 @@ router.post('/create', checkToken, async (req, res) => {
     const userId = req.userId; 
     const { content, signature } = req.body;
   
-    const contract = new Contract({
+    const contract = new ContractModel({
       content: content,
       signature: signature,
       user: userId
@@ -26,7 +26,7 @@ router.get('/', checkToken, async (req, res) => {
     const userId = req.userId;
   
     try {
-      const contracts = await Contract.find({ user: userId });
+      const contracts = await ContractModel.find({ user: userId });
       res.json(contracts);
     } catch (err) {
       res.status(500).json({ message: err.message });
