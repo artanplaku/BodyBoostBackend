@@ -10,7 +10,7 @@ router.post('/create', checkToken, async (req, res) => {
     const contract = new ContractModel({
       content: content,
       signature: signature,
-      user: userId
+      userId: userId
     });
   
     try {
