@@ -39,6 +39,11 @@ app.use('/api/images', imageRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/api/contracts', contractRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
 
 const port = process.env.PORT || 4000
 app.listen(port, ()=>{
