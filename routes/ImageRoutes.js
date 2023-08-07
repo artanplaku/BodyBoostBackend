@@ -37,9 +37,12 @@ router.get('/', checkToken, async (req, res) => {
   try {
     const userId = req.userId;
     const images = await ImageModel.find({ user: userId });
-    const imagesDataUrls = images.map(image => `data:${image.contentType};base64,${image.imageData}`);
-    //  transforming an array of images (from the database) into an array of Data URLs.
-    res.json(imagesDataUrls);
+    const imagesData = images.map(image => ({
+      _id: image._id, 
+      dataUrl: `data:${image.contentType};base64,${image.imageData}`
+      //  transforming an array of images (from the database) into an array of Data URLs.
+    }));
+    res.json(imagesData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
