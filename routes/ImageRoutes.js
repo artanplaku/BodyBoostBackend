@@ -4,46 +4,47 @@ const ImageModel = require('../models/imageModel');
 const router = express.Router();
 const checkToken = require('../checkToken');
 const fs = require('fs'); 
-
-const dir = './uploads';
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-})
-
-const upload = multer({ storage: storage })
+// Multer setup for memory storage (file will be available as buffer)
+const upload = multer();
 
 router.post('/upload', checkToken, upload.single('image'), async (req, res) => {
-  const userId = req.userId; 
-  const imageUrl = `/uploads/${req.file.filename}`;
+  try {
+    const userId = req.userId;
 
-  const image = new ImageModel({
-    imageUrl: imageUrl,
-    user: userId
-  });
+    const imageData = req.file.buffer.toString('base64');
+    //req.file is an object provided by multer when a file is uploaded. It contains several properties related to the uploaded file.
+    
+    //req.file.buffer is the file content in the form of a buffer. This buffer represents the binary data of the file.
+    
+    // .toString('base64') is a method to convert this buffer (binary data) into a Base64-encoded string. Base64 encoding is a way to convert binary data into a set of ASCII characters. This makes it possible to embed binary data, like images, directly within text-based formats like JSON.
 
-  await image.save();
+    const image = new ImageModel({
+      imageData: imageData,
+      contentType: req.file.mimetype,
+      user: userId
+      // req.file.mimetype provides the MIME type of the uploaded file. The MIME type is a standard way to describe the type and nature of the file. For images, it can be something like image/jpeg for JPEG images, image/png for PNG images, etc.
+    });
 
-  res.json({ imageUrl: imageUrl });
+    await image.save();
+
+    res.json({ success: true, message: 'Image uploaded!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.get('/', checkToken, async (req, res) => {
-    try {
-      const userId = req.userId;
-      const images = await ImageModel.find({ user: userId });
-      res.json(images);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  });
+  try {
+    const userId = req.userId;
+    const images = await ImageModel.find({ user: userId });
+    const imagesDataUrls = images.map(image => `data:${image.contentType};base64,${image.imageData}`);
+    //  transforming an array of images (from the database) into an array of Data URLs.
+    res.json(imagesDataUrls);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
   
 
 module.exports = router;

@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const imageSchema = new mongoose.Schema({
-  imageUrl: {
+  imageData: {
+    type: String,
+    required: true
+  },
+  contentType: {
     type: String,
     required: true
   },
@@ -19,3 +23,4 @@ const imageSchema = new mongoose.Schema({
 const ImageModel = mongoose.model('Image', imageSchema);
 
 module.exports = ImageModel;
+
