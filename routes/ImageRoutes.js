@@ -45,6 +45,18 @@ router.get('/', checkToken, async (req, res) => {
   }
 });
 
+// ImageRoutes.js
+router.delete('/:id', checkToken, async (req, res) => {
+  try {
+      const imageId = req.params.id;
+      await ImageModel.findByIdAndDelete(imageId);
+      res.json({ message: "Image deleted successfully." });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
+
   
 
 module.exports = router;
