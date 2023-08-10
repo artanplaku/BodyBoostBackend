@@ -9,6 +9,10 @@ const API_KEY = process.env.OPENAI_API_KEY;
 router.post('/', checkToken, async (req, res) => {
     const requestBody = req.body;
 
+    if (!requestBody || !requestBody.messages) {
+        return res.status(400).json({ error: "Invalid request body format. 'messages' field is required." });
+    }
+
     try {
         const response = await axios.post(OPENAI_API_URL, requestBody, {
             headers: {
@@ -17,10 +21,12 @@ router.post('/', checkToken, async (req, res) => {
             }
         });
         console.log("OpenAI API Response:", response.data);
-        res.json(response.data);
-        console.log(response.data)
+        res.json(response.data)
     } catch (error) {
-        console.error("Error while processing the request:", error);
+        console.log("Error while processing the request:", error);
+        if (error.response && error.response.data) {
+            return res.status(error.response.status).json(error.response.data);
+        }
         res.status(500).json({ error: "Failed to process the request." });
     }
 });
