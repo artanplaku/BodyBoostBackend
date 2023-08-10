@@ -8,6 +8,7 @@ const protectedRouter = require('./routes/protectedRouter');
 const imageRoutes = require('./routes/ImageRoutes');
 const contractRoutes = require('./routes/ContractRoutes') 
 const checkToken = require('./checkToken')
+const chatRoute =  require('./routes/chatRoute')
 require('dotenv').config();
 
 const app = express();
@@ -38,6 +39,7 @@ app.use('/api/protected', checkToken, protectedRouter);
 app.use('/api/images', imageRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/api/contracts', contractRoutes);
+app.use('/api/chat', chatRoute)
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
