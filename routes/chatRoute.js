@@ -16,9 +16,11 @@ router.post('/', checkToken, async (req, res) => {
                 "Content-Type": "application/json"
             }
         });
-
+        console.log("OpenAI API Response:", response.data);
         res.json(response.data);
+        console.log(response.data)
     } catch (error) {
+        console.error("Error while processing the request:", error);
         res.status(500).json({ error: "Failed to process the request." });
     }
 });
