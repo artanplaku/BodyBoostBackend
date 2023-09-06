@@ -64,6 +64,29 @@ router.put('/:id', async (req, res) => {
     }
   });
 
+  // Define the endpoint to update the clicked status of a specific exercise
+router.put('/:workoutId/exercises/:exerciseId/click', checkToken, async (req, res) => {
+  try {
+    const workout = await Workout.findById(req.params.workoutId);
+    if (!workout) {
+      return res.status(404).json({ message: 'Workout not found' });
+    }
+    
+    const exercise = workout.exercises.id(req.params.exerciseId);
+    if (!exercise) {
+      return res.status(404).json({ message: 'Exercise not found' });
+    }
+
+    exercise.clicked = !exercise.clicked; // Toggle clicked status
+
+    await workout.save();
+    res.json(exercise);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 // Define the endpoint to delete a workout by ID
 router.delete('/:id', async (req, res) => {
   try {
