@@ -29,6 +29,10 @@ const workoutSchema = new mongoose.Schema({
       clicked: {
         type: Boolean,
         default: false,
+      },
+      completedDate: {
+        type: Date,
+        default: null
       }
     },
   ],

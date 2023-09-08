@@ -79,6 +79,12 @@ router.put('/:workoutId/exercises/:exerciseId/click', checkToken, async (req, re
 
     exercise.clicked = !exercise.clicked; // Toggle clicked status
 
+    if(exercise.clicked) {
+      exercise.completedDate = new Date();
+    } else {
+      exercise.completedDate = null;
+    }
+
     await workout.save();
     res.json(exercise);
   } catch (err) {
