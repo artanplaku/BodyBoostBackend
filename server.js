@@ -10,6 +10,7 @@ const contractRoutes = require('./routes/ContractRoutes')
 const checkToken = require('./checkToken')
 const chatRoute =  require('./routes/chatRoute')
 const exerciseRoutes = require('./routes/exerciseRoutes');
+const weightRouter = require('./routes/WeightRoute')
 require('dotenv').config();
 
 const app = express();
@@ -42,6 +43,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/contracts', contractRoutes);
 app.use('/api/chat', chatRoute)
 app.use('/api/exercises', exerciseRoutes);
+app.use('/api/weight-entry', weightRouter)
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

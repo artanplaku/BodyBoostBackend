@@ -9,11 +9,11 @@ router.post('/register', (req, res) => {
         if (err) {
             return res.status(500).send(err.message);
         }
-        User.create({ username: req.body.username, email: req.body.email, password: hash }, (err, user) => {
+        User.create({ name: req.body.name, username: req.body.username, email: req.body.email, password: hash }, (err, user) => {
             if (err) {
                 return res.status(500).send(err.message);
             }
-            const token = jwt.sign({ id: user._id }, 'secretKey');
+            const token = jwt.sign({ id: user._id, name: user.name }, 'secretKey');
             res.send({ token });
         });
     });
@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
                
                 return res.status(401).send('Incorrect password');
             }
-            const token = jwt.sign({ id: user._id }, 'secretKey');
+            const token = jwt.sign({ id: user._id, name: user.name }, 'secretKey');
             console.log("Login successful. Token: ", token);
             res.send({ token });
         });
