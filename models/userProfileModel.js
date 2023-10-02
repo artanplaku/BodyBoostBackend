@@ -12,7 +12,8 @@ const userProfileSchema = new mongoose.Schema({
     age: Number,
     startingWeight: Number,
     currentWeight: Number,
-    goalWeight: Number
+    goalWeight: Number,
+    lastUpdated: Date
 }, {
     timestamps: true
 });
